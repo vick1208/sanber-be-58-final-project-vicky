@@ -1,22 +1,25 @@
 import { Request, Response } from "express";
+
+// import * as Yup from 'yup';
 import ProductsModel from "@/models/products.model";
-import * as Yup from 'yup';
 import CategoriesModel from "@/models/categories.model";
+import { productValidation, Yup } from "@/utils/validationSchema";
+import { IPaginationQuery } from "@/utils/interfaces";
 
-const createValidationSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  price: Yup.number().required(),
-  category: Yup.string().required(),
-  description: Yup.string().required(),
-  images: Yup.array().of(Yup.string()).required().min(1),
-  qty: Yup.number().required().min(1),
-});
+// const createValidationSchema = Yup.object().shape({
+//   name: Yup.string().required(),
+//   price: Yup.number().required(),
+//   category: Yup.string().required(),
+//   description: Yup.string().required(),
+//   images: Yup.array().of(Yup.string()).required().min(1),
+//   qty: Yup.number().required().min(1),
+// });
 
-interface IPaginationQuery {
-  page: number;
-  limit: number;
-  search?: string;
-}
+// interface IPaginationQuery {
+//   page: number;
+//   limit: number;
+//   search?: string;
+// }
 export default {
   async create(req: Request, res: Response) {
     try {
@@ -32,7 +35,7 @@ export default {
         });
       }
 
-      const {category} = req.body;
+      const { category } = req.body;
 
       if (category) {
         const categoryFound = await CategoriesModel.findById(category);
@@ -50,14 +53,14 @@ export default {
 
       }
 
-      await createValidationSchema.validate(req.body);
+      await productValidation.validate(req.body);
 
       const newProduct = await ProductsModel.create(req.body);
 
       await CategoriesModel.findByIdAndUpdate(
         category,
-        {$push: {products: newProduct._id}},
-        {new:true, useFindAndModify:false},
+        { $push: { products: newProduct._id } },
+        { new: true, useFindAndModify: false },
       );
 
       res.status(201).json({
@@ -73,7 +76,7 @@ export default {
         return;
       }
       const err = error as Error;
-      
+
       res.status(500).json({
         data: err.message,
         message: "Failed create product",
@@ -98,10 +101,10 @@ export default {
       }
 
       const result = await ProductsModel.find(query)
-      .limit(limit)
-      .skip((page - 1)*limit)
-      .sort({createdAt: -1})
-      .populate('category');
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .sort({ createdAt: -1 })
+        .populate('category');
 
       const total = await ProductsModel.countDocuments(query);
 
@@ -111,7 +114,7 @@ export default {
         page: +page,
         limit: +limit,
         total,
-        totalPages: Math.ceil(total/limit)
+        totalPages: Math.ceil(total / limit)
       });
     } catch (error) {
       const err = error as Error;
@@ -173,7 +176,7 @@ export default {
           });
         }
       }
-      
+
       const product = await ProductsModel.findOneAndUpdate(
         { _id: req.params.id },
         req.body,
