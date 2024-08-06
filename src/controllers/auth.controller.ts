@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 
 import jwt from "jsonwebtoken";
 
@@ -7,32 +7,33 @@ import UserModel from "@/models/users.model";
 import { IReqUser } from "@/utils/interfaces";
 import { decrypt } from "@/utils/encryption";
 import { SECRET } from "@/utils/env";
+import { loginValidation, profileValidation,registerValidation,Yup } from "@/utils/validationSchema";
 
-const validateRegisterSchema = Yup.object().shape({
-    fullName: Yup.string().required(),
-    username: Yup.string().required(),
-    email: Yup.string().email().required(),
-    password: Yup.string().required(),
-    passwordConfirmation: Yup.string().oneOf(
-        [Yup.ref("password"), ""],
-        "Passwords must match"
-    ),
-});
+// const validateRegisterSchema = Yup.object().shape({
+//     fullName: Yup.string().required(),
+//     username: Yup.string().required(),
+//     email: Yup.string().email().required(),
+//     password: Yup.string().required(),
+//     passwordConfirmation: Yup.string().oneOf(
+//         [Yup.ref("password"), ""],
+//         "Passwords must match"
+//     ),
+// });
 
-const validateLoginSchema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().required(),
-});
+// const validateLoginSchema = Yup.object().shape({
+//     email: Yup.string().email().required(),
+//     password: Yup.string().required(),
+// });
 
-const validateProfileSchema = Yup.object().shape({
-    fullName: Yup.string().required(),
-    password: Yup.string().required(),
-    passwordConfirmation: Yup.string().oneOf(
-        [Yup.ref("password"), ""],
-        "Passwords must match"
-    ),
-    profilePicture: Yup.string(),
-});
+// const validateProfileSchema = Yup.object().shape({
+//     fullName: Yup.string().required(),
+//     password: Yup.string().required(),
+//     passwordConfirmation: Yup.string().oneOf(
+//         [Yup.ref("password"), ""],
+//         "Passwords must match"
+//     ),
+//     profilePicture: Yup.string(),
+// });
 
 
 
@@ -40,7 +41,7 @@ export default {
     async profile(req: Request, res: Response) {
         const userId = (req as IReqUser).user.id;
         try {
-            await validateProfileSchema.validate(req.body);
+            await profileValidation.validate(req.body);
 
             await UserModel.updateOne({ _id: userId }, { ...req.body });
 
@@ -86,7 +87,7 @@ export default {
     async login(req: Request, res: Response) {
         const { email, password } = req.body;
         try {
-            await validateLoginSchema.validate({
+            await loginValidation.validate({
                 email,
                 password,
             });
@@ -133,7 +134,7 @@ export default {
     async register(req: Request, res: Response) {
         const { fullName, username, email, password, roles = ["user"] } = req.body;
         try {
-            await validateRegisterSchema.validate({
+            await registerValidation.validate({
                 fullName,
                 username,
                 email,
