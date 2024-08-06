@@ -1,6 +1,7 @@
 import OrderModel from '@/models/orders.model';
 import ProductsModel from '@/models/products.model';
-import { IReqProduct, IReqUser } from '@/utils/interfaces';
+import UserModel from '@/models/users.model';
+import { IPaginationQuery, IReqProduct, IReqUser } from '@/utils/interfaces';
 import { orderValidation, Yup } from '@/utils/validationSchema';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
@@ -82,7 +83,29 @@ export default {
         }
     },
 
-    async findAll(req: Request, res: Response) {
+    async findAllUserOrder(req: Request, res: Response) {
+        const userId = (req as IReqUser).user.id;
 
+        const user = await UserModel.findById(userId);
+
+        try {
+            const {
+                page = 1,
+                limit = 10,
+            } = req.query as unknown as IPaginationQuery;
+
+            const { status } = req.query as { status: string };
+            const validStatus = ["pending", "completed", "cancelled"];
+
+            const queryUser: { [key: string]: any } = {
+                createdBy: userId,
+            }
+
+            if (status) {
+                const requestedStatus = status.toLowerCase();
+            }
+        } catch (error) {
+
+        }
     }
 };
