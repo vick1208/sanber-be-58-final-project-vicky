@@ -113,7 +113,7 @@ Base URL: <https://sanber-be-58-final-project-vicky-production.up.railway.app/ap
     "password": "Password User Baru",
     "username": "Username User Baru",
     "roles": [
-        "user"|"admin"
+        "user","admin"
     ]
 }
 ```
