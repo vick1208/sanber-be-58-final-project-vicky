@@ -103,9 +103,39 @@ export default {
 
             if (status) {
                 const requestedStatus = status.toLowerCase();
+                if (!validStatus.includes(requestedStatus)) {
+                    return res.status(404).json({
+                        message: "Failed to get user's order history",
+                        detail: `${requestedStatus} is not a valid status`,
+                    });
+                }
+
+                queryUser.status = status;
             }
+            const orders = await OrderModel.find(queryUser)
+                .limit(limit)
+                .skip((page - 1) * limit)
+                .sort({ createdAt: -1 });
+
+            const total = orders.length;
+
+            res.status(200).json({
+                page: +page,
+                limit: +limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+                user: user,
+                orders: orders,
+            });
+
         } catch (error) {
 
+            const err = error as Error;
+
+            res.status(500).json({
+                message: "Failed to get user's order history",
+                detail: err.message,
+            });
         }
     }
 };
