@@ -86,7 +86,7 @@ Base URL: <https://sanber-be-58-final-project-vicky-production.up.railway.app/ap
     "name": "Nama Produk",
     "description": "Deskripsi Produk",
     "images": [
-        "test1.jpg"
+        "test1.jpg",
         "test2.jpg",
         "test3.jpg"
     ],
@@ -113,7 +113,8 @@ Base URL: <https://sanber-be-58-final-project-vicky-production.up.railway.app/ap
     "password": "Password User Baru",
     "username": "Username User Baru",
     "roles": [
-        "user","admin"
+        "user",
+        "admin"
     ]
 }
 ```
