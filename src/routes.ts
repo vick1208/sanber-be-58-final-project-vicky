@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     res.status(200).json({
-        status: "OK",
-        message: "Selamat datang di API Toserba Typescript",
+        success: true,
+        message: "Selamat datang di API Toserba Typescript.",
     });
 });
 

@@ -69,7 +69,7 @@ OrderSchema.post('save', async function (doc, next) {
 
     await mail.send({
         to: user.email,
-        subject: "T",
+        subject: "Toserba Typescript Order Invoice",
         content: mailContent,
     });
 
