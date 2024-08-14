@@ -4,10 +4,6 @@
 
 Project Akhir Sanbercode Node.js menggunakan _framework_ Express.js untuk melakukan proses CRUD data dengan menggunakan MongoDB, TypeScript,dan Cloudinary.
 
-### Public URL Railway
-
-Railway deployment : [Final Project Link](https://sanber-be-58-final-project-vicky-production.up.railway.app/api).
-
 ## API Endpoints
 
 ### User Authentication
@@ -60,7 +56,7 @@ Railway deployment : [Final Project Link](https://sanber-be-58-final-project-vic
 
 ## Request Body Format
 
-Base URL: <https://sanber-be-58-final-project-vicky-production.up.railway.app/api>
+Base URL: <http://localhost:3000/api>
 
 * Method POST Order
 
